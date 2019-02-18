@@ -13,6 +13,25 @@ namespace LoanUnionAPI.Controllers
     [EnableCors("http://localhost:4200", "*", "*")]
     public class CustomersController : ApiController
     {
+        public IHttpActionResult GetCustomer(int id)
+        {
+            try
+            {
+                using (var context = new AppDbContext())
+                {
+                    var customer = context.Customers.FirstOrDefault(n =>n.Id ==id);
+                    if (customer == null) return NotFound();
+                    return Ok(customer);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+        }
+
         public IHttpActionResult GetCustomers()
         {
             try
@@ -71,9 +90,6 @@ namespace LoanUnionAPI.Controllers
                     oldCustomer.Salary = customer.Salary;
                     oldCustomer.Email = customer.Email;
                     oldCustomer.FathersName = customer.FathersName;
-                    oldCustomer.DateOfBirth = customer.DateOfBirth;
-                    oldCustomer.UniqueCode = customer.UniqueCode;
-                    oldCustomer.ScanCopy = customer.ScanCopy;
                     context.SaveChanges();
                     return Ok("Customer updated!");
                 }
@@ -87,7 +103,29 @@ namespace LoanUnionAPI.Controllers
                       
  
         }
-        
+
+        [HttpDelete]
+        public IHttpActionResult DeleteCustomer(int id)
+        {
+            try
+            {
+                using (var context = new AppDbContext())
+                {
+                    var customer = context.Customers.FirstOrDefault(n => n.Id == id);
+                    if (customer == null) return NotFound();
+
+                    context.Customers.Remove(customer);
+                    context.SaveChanges();
+
+                    return Ok("Customer deleted");
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
 

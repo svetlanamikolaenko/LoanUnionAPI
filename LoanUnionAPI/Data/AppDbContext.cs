@@ -14,5 +14,9 @@ namespace LoanUnionAPI.Data
 
         }
         public DbSet<Customer> Customers { get; set; }
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<System.Data.Entity.ModelConfiguration.Conventions.PluralizingTableNameConvention>();
+        }
     }
 }
